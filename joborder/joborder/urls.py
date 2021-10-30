@@ -19,5 +19,6 @@ from django.urls.conf import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('inward/',include('inward.urls',namespace='inward'))
+    path('inward/',include('inward.urls',namespace='inward')),
+    path('quality/',include('quality.urls',namespace='quality'))
 ]

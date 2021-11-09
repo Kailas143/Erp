@@ -87,6 +87,18 @@ DATABASES = {
                 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
                   }
     },
+        'dynamic': {
+        'ENGINE':'django.db.backends.mysql',
+        'NAME': 'dynamicdb_erp2',                                     
+        'HOST' : 'localhost',
+        'USER' : 'root',
+        'PASSWORD' :'password',
+        'PORT' :'',
+       'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+                  }
+    }
+}
 }
 
 

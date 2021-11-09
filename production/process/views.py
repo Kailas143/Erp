@@ -11,7 +11,7 @@ from mptt.fields import TreeForeignKey
 from rest_framework.response import Response
 from mptt.templatetags.mptt_tags import cache_tree_children, tree_info
 import requests,json
-
+from .dynamic import dynamic_link
 
 # Create your views here.
 class ProcessViewset(mixins.CreateModelMixin,mixins.RetrieveModelMixin,mixins.ListModelMixin,generics.GenericAPIView,APIView):
@@ -71,10 +71,11 @@ class proces_bom(generics.GenericAPIView,mixins.ListModelMixin,APIView):
         slug=request.data['slug']
 
         pbom=Process_bom(title=bom_title,process_details=Process_details.objects.get(id=pd),reqd_qty=reqd_qty,job_order=job,raw_material=rid,slug=slug)
+        #if joborder is null or 0 stock will be filter based on raw materials an update the stock and create stock history
         if job == 0:
-            print(rid)
-            print(requests.get('http://127.0.0.1:8001/store/raw/'+str(rid)).json())
-            response=requests.get('http://127.0.0.1:8001/store/raw/'+str(rid)).json()
+            services = 'raw_materials'
+            dynamic=dynamic_link(services,'store/raw/'+str(rid))
+            response=requests.get(dynamic).json()
             qnty_r=response['quantity']
             mins=response['min_stock']
             maxs=response['max_stock']
@@ -92,12 +93,13 @@ class proces_bom(generics.GenericAPIView,mixins.ListModelMixin,APIView):
                         'worker_name':'hgg',
                         'raw_materials' : rawm,
                     }
-                update=requests.put('http://127.0.0.1:8001/store/raw/'+str(rid)+'/',data=datas).json()
+                update=requests.put(dynamic,data=datas).json()
      
             
         elif rid== 0 :
-            
-            response=requests.get('http://127.0.0.1:8002/store/stock/'+str(job) + '/').json()
+            services = 'joborder'
+            dynamic=dynamic_link(services,'store/stock/'+str(job))
+            response=requests.get(dynamic).json()
             qnty_r=response['quantity']
             mins=response['min_stock']
             maxs=response['max_stock']
@@ -116,7 +118,7 @@ class proces_bom(generics.GenericAPIView,mixins.ListModelMixin,APIView):
                         'worker_name':'hgg',
                         'job_order' : jobm,
                     }
-                update=requests.put('http://127.0.0.1:8002/store/stock/'+str(job)+'/',data=datas).json()
+                update=requests.put(dynamic,data=datas).json()
             
         pbom.save()
         

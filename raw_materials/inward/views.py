@@ -36,16 +36,15 @@ class DC_details_add(generics.GenericAPIView,APIView,mixins.ListModelMixin):
        
        
         if serializer.is_valid():
-            company_idr = dcdata['tenant_id']
+            
             dc_number_r = dcdata['dc_no']
             #calling the get_tenant function from utilities file
             # tenant_id = get_tenant(request)
             #filtering the dc details based on the financial year,to check wheather the dc details with same company exists or not
-            dc = raw_component_fin_dc_inward_details.objects.filter(
-                tenant_id=company_idr,dc_no=dc_number_r)
+            dc = raw_component_fin_dc_inward_details.objects.filter(dc_no=dc_number_r).exists()
             print(dc)
             if dc:
-                data['error'] = 'Company with this dc number already exist !!! Try with another dc number'
+                data['error'] = 'This dc number already exist !!! Try with another dc number'
             else:
                 #here passing the tenant id value to the serializer of dc
                 # inward=serializer.save(tenant_id=tenant_id)
@@ -72,23 +71,21 @@ class DC_bill_add(generics.GenericAPIView,APIView):
        
         if serializer.is_valid():
             # company_idr = dcdata['tenant_id']
-            # dc_number_r = dcdata['dc_no']
+            dc_number_r = dcdata['bill_no']
             # #calling the get_tenant function from utilities file
             # # tenant_id = get_tenant(request)
             # #filtering the dc details based on the financial year,to check wheather the dc details with same company exists or not
-            # dc = raw_component_fin_bill_inward_details.objects.filter(
-            #     tenant_id=company_idr,dc_no=dc_number_r)
+            dc = raw_component_fin_bill_inward_details.objects.filter(bill_no=dc_number_r)
             # print(dc)
-            # if dc:
-            #     data['error'] = 'Company with this dc number already exist !!! Try with another dc number'
-            # else:
-                #here passing the tenant id value to the serializer of dc
-                # inward=serializer.save(tenant_id=tenant_id)
-            inward=serializer.save()
-            for dc in dcmaterials :
-                materials=raw_component_fin_material_bill_inward(tenant_id=1,raw_component_fin_bill_inward_details=raw_component_fin_bill_inward_details.objects.get(id=inward.id),raw_component_price=dc['raw_component_price'],qty=dc['qty'],billed_qty=dc['billed_qty'],rate_match=dc['rate_match'],error=dc['error'],error_bal=dc['error_bal'],igst_amount=dc['igst_amount'],sgst_amount=dc['sgst_amount'],cgst_amount=dc['cgst_amount'],tgst=dc['tgst'],bill_amount=dc['bill_amount'],worker_name=dc['worker_name'])
-                materials.save()
-            data['success']="successfully saved"
+            if dc:
+                data['error'] = 'Bill number already exist !!! Try another one'
+            else:
+               
+                inward=serializer.save()
+                for dc in dcmaterials :
+                    materials=raw_component_fin_material_bill_inward(raw_component_fin_bill_inward_details=raw_component_fin_bill_inward_details.objects.get(id=inward.id),raw_component_price=dc['raw_component_price'],qty=dc['qty'],billed_qty=dc['billed_qty'],rate_match=dc['rate_match'],error=dc['error'],error_bal=dc['error_bal'],igst_amount=dc['igst_amount'],sgst_amount=dc['sgst_amount'],cgst_amount=dc['cgst_amount'],tgst=dc['tgst'],bill_amount=dc['bill_amount'],worker_name=dc['worker_name'])
+                    materials.save()
+                    data['success']="successfully saved"
         else :
             return Response("serialization Error")
 

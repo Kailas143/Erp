@@ -34,7 +34,7 @@ class raw_component_fin_material_serializers(serializers.ModelSerializer):
     raw_component_fin_dc_inward_details=raw_component_fin_bill_inward_details_serializers()
     class Meta :
         model=raw_component_fin_material_dc_inward
-        fields=['tenant_id','raw_component_fin_dc_inward_details','raw_component_price','qty','billed_qty','error','sgst_amount','error_bal','igst_amount','cgst_amount','tgst',',bill_amount','worker_name']
+        fields='__all__'
 
 class receipt_no_generation_serializers(serializers.ModelSerializer):
     class Meta :
@@ -45,4 +45,4 @@ class  raw_component_fin_material_bill_serializers(serializers.ModelSerializer):
     raw_component_fin_bill_inward_details=raw_component_fin_dc_inward_details_serializers()
     class Meta :
         model=raw_component_fin_material_dc_inward
-        fields=['tenant_id','raw_component_fin_bill_inward_details','raw_component_price','qty','billed_qty','error','worker_name']
+        fields='__all__'

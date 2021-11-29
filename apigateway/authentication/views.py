@@ -8,15 +8,17 @@ from rest_framework.authentication import (BasicAuthentication,
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from .permissions import IsJoborder,IsProduction,IsRawmaterials
 from .dynamic  import dynamic_link
 import requests
 import json
+from .utilities import get_tenant
 
 
 class Tenant_company_list(generics.GenericAPIView,mixins.ListModelMixin,mixins.CreateModelMixin):
     serializer_class=TenantSerializer
     queryset=Tenant_Company.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,IsRawmaterials]
 
     def get(self,request):
         return self.list(request)
@@ -52,7 +54,7 @@ class SignupAPI(generics.GenericAPIView, mixins.ListModelMixin, APIView):
         return Response(data)
 
 class branding_register(APIView):
-
+    permission_classes = [IsAuthenticated,IsRawmaterials]
 
     def get(self, request):
         
@@ -152,3 +154,564 @@ class emp_roles(generics.GenericAPIView,APIView,mixins.CreateModelMixin,mixins.L
 
     def get(self,request):
         return self.list(request)
+
+class get_company_details(APIView):
+    # #permission_classes = [IsAuthenticated,]
+
+    def get(self,request):
+        
+    
+        services='admin'
+        dynamic=dynamic_link(services,'master/company/details/list')
+        response=requests.get(dynamic).json()
+        return Response(response)
+
+
+         
+
+class get_purchase_company_details(APIView):
+   
+    def get(self,request):
+        
+        # username_r=request.user.username
+        # tenant_id=request.user.tenant_company.id
+        # user=User.admin_objects.get_queryset(username=username_r,tenant_id=tenant_id).exists()
+        # print(user)
+        # data={}
+        # if user :
+    
+            services='admin'
+            dynamic=dynamic_link(services,'master/purchase/company/list')
+            response=requests.get(dynamic).json()
+            return Response(response)
+
+        # else :
+
+        #    data['error']="Please login as admin user"
+        #    return Response(data)
+
+class get_supplier_contact(APIView):
+    #permission_classes = [IsAuthenticated,]
+
+    def get(self,request):
+     
+        #username_r=request.user.username
+        # tenant_id=request.user.tenant_company.id
+        # user=User.admin_objects.get_queryset(username=username_r,tenant_id=tenant_id).exists()
+        # print(user)
+        # data={}
+        # if user :
+    
+            services='admin'
+            dynamic=dynamic_link(services,'master/suppliers/details/list')
+            response=requests.get(dynamic).json()
+            return Response(response)
+
+        # else :
+
+        #    data['error']="Please login as admin user"
+        #    return Response(data)
+
+class get_joborder_company_details(APIView):
+    #permission_classes = [IsAuthenticated,]
+
+    def get(self,request):
+     
+        # username_r=request.user.username
+        # tenant_id=request.user.tenant_company.id
+        # user=User.admin_objects.get_queryset(username=username_r,tenant_id=tenant_id).exists()
+        # data={}
+        # if user :
+    
+            services='admin'
+            dynamic=dynamic_link(services,'master/job/company/list')
+            response=requests.get(dynamic).json()
+            return Response(response)
+
+        # else :
+
+        #    data['error']="Please login as admin user"
+        #    return Response(data)
+
+class get_joborder_company_details(APIView):
+    # #permission_classes = [IsAuthenticated,]
+
+    def get(self,request):
+     
+        # username_r=request.user.username
+        # tenant_id=request.user.tenant_company.id
+        # user=User.admin_objects.get_queryset(username=username_r,tenant_id=tenant_id).exists()
+        # data={}
+        # if user :
+    
+            services='admin'
+            dynamic=dynamic_link(services,'master/job/company/list')
+            response=requests.get(dynamic).json()
+            return Response(response)
+
+        # else :
+
+        #    data['error']="Please login as admin user"
+        #    return Response(data)
+
+class get_joborder_contact_details(APIView):
+    # #permission_classes = [IsAuthenticated,]
+
+    def get(self,request):
+     
+        # username_r=request.user.username
+        # tenant_id=request.user.tenant_company.id
+        # user=User.admin_objects.get_queryset(username=username_r,tenant_id=tenant_id).exists()
+        # data={}
+        # if user :
+    
+            services='admin'
+            dynamic=dynamic_link(services,'master/job/contact/list')
+            response=requests.get(dynamic).json()
+            return Response(response)
+
+        # else :
+
+        #    data['error']="Please login as admin user"
+        #    return Response(data)
+
+
+class get_rawmaterials_details(APIView):
+    #permission_classes = [IsAuthenticated,]
+
+    def get(self,request):
+     
+        # username_r=request.user.username
+        # tenant_id=request.user.tenant_company.id
+        # user=User.admin_objects.get_queryset(username=username_r,tenant_id=tenant_id).exists()
+        # data={}
+        # if user :
+    
+            services='admin'
+            dynamic=dynamic_link(services,'master/raw/list')
+            response=requests.get(dynamic).json()
+            return Response(response)
+
+        # else :
+
+        #    data['error']="Please login as admin user"
+        #    return Response(data)
+
+class get_raw_price_details(APIView):
+    #permission_classes = [IsAuthenticated,]
+
+    def get(self,request):
+     
+        # username_r=request.user.username
+        # tenant_id=request.user.tenant_company.id
+        # user=User.admin_objects.get_queryset(username=username_r,tenant_id=tenant_id).exists()
+        # data={}
+        # if user :
+    
+            services='admin'
+            dynamic=dynamic_link(services,'master/raw/price/list')
+            response=requests.get(dynamic).json()
+            return Response(response)
+
+        # else :
+
+        #    data['error']="Please login as admin user"
+        #    return Response(data)
+
+class get_job_component_details(APIView):
+    #permission_classes = [IsAuthenticated,]
+
+    def get(self,request):
+     
+        # username_r=request.user.username
+        # tenant_id=request.user.tenant_company.id
+        # user=User.admin_objects.get_queryset(username=username_r,tenant_id=tenant_id).exists()
+        # data={}
+        # if user :
+    
+            services='admin'
+            dynamic=dynamic_link(services,'master/job/component/list')
+            response=requests.get(dynamic).json()
+            return Response(response)
+
+        # else :
+
+        #    data['error']="Please login as admin user"
+        #    return Response(data)
+
+class get_job_order_price(APIView):
+    #permission_classes = [IsAuthenticated,]
+
+    def get(self,request):
+        # print(';;;')
+        # username_r=request.user.username
+        # print(request.user.tenant_company.domain,'ll')
+        # # print(get_tenant(request),'88')
+        # tenant_id=request.user.tenant_company.id
+        # # print(tenant_id,'ttt')
+        # user=User.admin_objects.get_queryset(username=username_r,tenant_id=tenant_id).exists()
+        # data={}
+        # if user :
+    
+            services='admin'
+            dynamic=dynamic_link(services,'master/job/order/price/list')
+            response=requests.get(dynamic).json()
+            return Response(response)
+
+        # else :
+
+        #    data['error']="Please login as admin user"
+        #    return Response(data)
+
+
+
+class add_company_details(APIView):
+    # #permission_classes = [IsAuthenticated,]
+
+    def post(self,request):
+        
+        # username_r=request.user.username
+        # tenant_id=request.user.tenant_company.id
+        # # tenant_id=get_tenant(request)
+        # user=User.admin_objects.get_queryset(username=username_r,tenant_id=tenant_id).exists()
+        # print(user)
+        # data={}
+        # if user :
+        #     datas={
+               
+        #         "tenant_id" : tenant_id,
+        #         "company_name": request.data['company_name'],
+        #         "address_line1":request.data['address_line1'],
+        #         "address_line2":request.data['address_line2'],
+        #         "address_line3":request.data['address_line3'],
+        #         "office_email": request.data['office_email'],
+        #         "office_pnone_no": request.data['office_pnone_no'],
+        #         "gst_no": request.data['gst_no'],
+        #         "acc_no": request.data['acc_no'],
+        #         "ifsc_code": request.data['ifsc_code'],
+        #         "bank_name": request.data['bank_name'],
+        #         "branch_name": request.data['branch_name'],
+        #         "purchase_company":request.data['purchase_company'],
+        #         "ratings": request.data['ratings'],
+        #         "vendor_code": request.data['vendor_code'],
+        #         "description": request.data['description'],
+            
+        #     } 
+            services='admin'
+            dynamic=dynamic_link(services,'master/company/details')
+            response=requests.post(dynamic,data=request.data).json()
+           
+            return Response(response)
+
+        # else :
+
+        #    data['error']="Sorry data are not added"
+        #    return Response(data)
+
+class add_supplier_contact(APIView):
+    # #permission_classes = [IsAuthenticated,]
+
+    def post(self,request):
+        data={}
+        
+    #     username_r=request.user.username
+    #     tenant_id=request.user.tenant_company.id
+    #     # tenant_id=get_tenant(request)
+    #     user=User.admin_objects.get_queryset(username=username_r,tenant_id=tenant_id).exists()
+    #     print(user)
+    #     data={}
+    #     if user :
+    #         datas={
+    #                 "tenant_id": tenant_id,
+    #                 "company_details": request.data['company_details'],
+    #                 "email": request.data['email'],
+    #                 "phone_no": request.data['phone_no'],
+    #                 "name": request.data['name'],
+    #                 "post":request.data['post']
+    
+            
+    #         } 
+        services='admin'
+        dynamic=dynamic_link(services,'master/suppliers/contact')
+        response=requests.post(dynamic,data=request.data).json()
+        data['success']="Record added successfully"
+        return Response(response)
+
+        # else :
+
+        #    data['error']="Sorry data are not added"
+        #    return Response(data)
+
+class add_joborder_company_details(APIView):
+    #permission_classes = [IsAuthenticated,]
+
+    def post(self,request):
+        
+        # username_r=request.user.username
+        # tenant_id=request.user.tenant_company.id
+        # # tenant_id=get_tenant(request)
+        # user=User.admin_objects.get_queryset(username=username_r,tenant_id=tenant_id).exists()
+        # print(user)
+        # data={}
+        # if user :
+            # datas= {
+                  
+                    # "tenant_id": tenant_id,
+                    # "company_name": request.data['company_name'],
+                    # "address_line1": request.data['address_line1'],
+                    # "address_line2": request.data['address_line2'],
+                    # "address_line3": request.data['address_line3'],
+                    # "office_email": request.data['office_email'],
+                    # "office_pnone_no": request.data['office_pnone_no'],
+                    # "gst_no": request.data['gst_no'],
+                    # "acc_no": request.data['acc_no'],
+                    # "ifsc_code": request.data['ifsc_code'],
+                    # "bank_name": request.data['bank_name'],
+                    # "branch_name": request.data['branch_name'],
+                    # "job_work_code": request.data['job_work_code'],
+                    # "ratings": request.data['ratings'],
+                    # "description": request.data['description']
+            services='admin'
+            dynamic=dynamic_link(services,'master/job/company')
+            response=requests.post(dynamic,data=request.data).json()
+          
+            return Response(response)
+
+        # else :
+
+        #    data['error']="Sorry data are not added"
+        #    return Response(data)
+
+class add_joborder_contact_details(APIView):
+    #permission_classes = [IsAuthenticated,]
+
+    def post(self,request):
+        
+    #     username_r=request.user.username
+    #     tenant_id=request.user.tenant_company.id
+    #     # tenant_id=get_tenant(request)
+    #     user=User.admin_objects.get_queryset(username=username_r,tenant_id=tenant_id).exists()
+    #     print(user)
+    #     data={}
+    #     if user :
+    #         datas= {
+                  
+    #                 "tenant_id": tenant_id,
+    #                 "supliers_details": request.data['supliers_details'],
+    #                 "email": request.data['email'],
+    #                 "phone_no":request.data['phone_no'],
+    #                 "name": request.data['phone_no'],
+    #                 "post": request.data['post'],
+    # }
+
+            services='admin'
+            dynamic=dynamic_link(services,'master/job/contact')
+            response=requests.post(dynamic,data=request.data).json()
+            return Response(response)
+
+        # else :
+
+        #    data['error']="Sorry data are not added"
+        #    return Response(data)
+
+class add_rawmaterials_details(APIView):
+    #permission_classes = [IsAuthenticated,]
+
+    def post(self,request):
+        
+        # username_r=request.user.username
+        # tenant_id=request.user.tenant_company.id
+        # # tenant_id=get_tenant(request)
+        # user=User.admin_objects.get_queryset(username=username_r,tenant_id=tenant_id).exists()
+        # print(user)
+        # data={}
+        # if user :
+        #     datas= {
+                   
+        #             "tenant_id":tenant_id,
+        #             "c_name": request.data['c_name'],
+        #             "c_code":  request.data['c_code'],
+        #             "c_unit":  request.data['c_unit'],
+        #             "c_material_grade":  request.data['c_material_grade'],
+        #             "c_model_name":  request.data['c_model_name'],
+        #             "wire":  request.data['wire'],
+        #             "winding":  request.data['winding'],
+        #             "shaft":  request.data['shaft']
+        #     }
+                
+
+            services='admin'
+            dynamic=dynamic_link(services,'master/raw')
+            response=requests.post(dynamic,data=request.data).json()
+            return Response(response)
+
+       
+
+class add_raw_price_details(APIView):
+    #permission_classes = [IsAuthenticated,]
+
+    def post(self,request):
+        
+        # username_r=request.user.username
+        # tenant_id=request.user.tenant_company.id
+        # # tenant_id=get_tenant(request)
+        # user=User.admin_objects.get_queryset(username=username_r,tenant_id=tenant_id).exists()
+        # print(user)
+        # data={}
+        # if user :
+        #     datas= {
+                     
+        #             "tenant_id":tenant_id,
+        #             "company_details":request.data['company_details'],
+        #             "raw_components_details": request.data['raw_components_details'],
+        #             "c_sgst":  request.data['c_sgst'],
+        #             "c_cgst":  request.data['c_cgst'],
+        #             "c_igst":  request.data['c_igst'],
+        #             "price":  request.data['price'],
+        #             "debit_price":  request.data['debit_price'],
+        #             "expire":  request.data['expire']
+        #     }
+                
+
+            services='admin'
+            dynamic=dynamic_link(services,'master/raw/price')
+            response=requests.post(dynamic,data=request.data).json()
+            # data['success']="Record added successfully"
+            return Response(response)
+
+        # else :
+
+        #    data['error']="Sorry data are not added"
+        #    return Response(data)
+
+class add_job_component_details(APIView):
+    #permission_classes = [IsAuthenticated,]
+
+    def post(self,request):
+        
+        # username_r=request.user.username
+        # tenant_id=request.user.tenant_company.id
+        # # tenant_id=get_tenant(request)
+        # user=User.admin_objects.get_queryset(username=username_r,tenant_id=tenant_id).exists()
+        # print(user)
+        # data={}
+        # if user :
+        #     datas= {
+                     
+        #             "tenant_id":tenant_id,
+        #             "job_order_company_details": request.data['job_order_company_details'],
+        #             "job_components_details":  request.data['job_components_details'],
+        #             "c_sgst":  request.data['c_sgst'],
+        #             "c_cgst":  request.data['c_cgst'],
+        #             "c_igst":  request.data['c_igst'],
+        #             "price":  request.data['price'],
+        #             "debit_price":  request.data['debit_price'],
+        #             "expire":  request.data['expire']
+        #     }
+                
+
+            services='admin'
+            dynamic=dynamic_link(services,'master/job/component')
+            response=requests.post(dynamic,data=request.data).json()
+            # data['success']="Record added successfully"
+            return Response(response)
+
+        # else :
+
+        #    data['error']="Sorry data are not added"
+        #    return Response(data)
+
+
+class add_job_order_price(APIView):
+    #permission_classes = [IsAuthenticated,]
+
+    def post(self,request):
+        
+        # username_r=request.user.username
+        # tenant_id=request.user.tenant_company.id
+        # # tenant_id=get_tenant(request)
+        # user=User.admin_objects.get_queryset(username=username_r,tenant_id=tenant_id).exists()
+        # print(user)
+        # data={}
+        # if user :
+        #     datas= {
+                     
+        #             "tenant_id":tenant_id,
+        #             "job_order_company_details": request.data['job_order_company_details'],
+        #             "job_components_details":  request.data['job_components_details'],
+        #             "c_sgst":  request.data['c_sgst'],
+        #             "c_cgst":  request.data['c_cgst'],
+        #             "c_igst":  request.data['c_igst'],
+        #             "price":  request.data['price'],
+        #             "debit_price":  request.data['debit_price'],
+        #             "expire":  request.data['expire']
+        #     }
+                
+
+            services='admin'
+            dynamic=dynamic_link(services,'master/job/component')
+            response=requests.post(dynamic,data=request.data).json()
+            # data['success']="Record added successfully"
+            return Response(response)
+
+        # else :
+
+        #    data['error']="Sorry data are not added"
+        #    return Response(data)
+
+class get_inward_dc_details(APIView):
+
+    def get(self,request):
+            services='raw_materials'
+            dynamic=dynamic_link(services,'inward/dc/list')
+            response=requests.get(dynamic,data=request.data).json()
+            # data['success']="Record added successfully"
+            return Response(response)
+
+
+class get_inward_dc_materials(APIView):
+
+    def get(self,request):
+            services='raw_materials'
+            dynamic=dynamic_link(services,'inward/materials/list')
+            response=requests.get(dynamic,data=request.data).json()
+            # data['success']="Record added successfully"
+            return Response(response)
+
+
+class get_inward_dc_bill(APIView):
+
+    def get(self,request):
+            services='raw_materials'
+            dynamic=dynamic_link(services,'inward/dc/bill/list')
+            response=requests.get(dynamic,data=request.data).json()
+            # data['success']="Record added successfully"
+            return Response(response)
+
+class get_inward_dc_materials_bill(APIView):
+
+    def get(self,request):
+            services='raw_materials'
+            dynamic=dynamic_link(services,'inward/materials/bill/list')
+            response=requests.get(dynamic,data=request.data).json()
+            # data['success']="Record added successfully"
+            return Response(response)
+
+class add_inward_dc(APIView):
+
+    def post(self,request):
+            services='raw_materials'
+            dynamic=dynamic_link(services,'inward/dc')
+            response=requests.post(dynamic,json=request.data).json()
+            # data['success']="Record added successfully"
+            return Response(response)
+
+
+class add_inward_dc_bill(APIView):
+
+    def post(self,request):
+            services='raw_materials'
+            dynamic=dynamic_link(services,'inward/dc/bill')
+            response=requests.post(dynamic,json=request.data).json()
+            # data['success']="Record added successfully"
+            return Response(response)

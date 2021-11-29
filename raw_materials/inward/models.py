@@ -12,7 +12,7 @@ class FinancialQuerySet(models.QuerySet):
         return self.filter(financial_period__gte=current_finyear_start,financial_period__lte=current_finyear_end,tenant_id=1)
 
 class raw_component_fin_bill_inward_details(models.Model):
-    tenant_id=models.PositiveIntegerField()
+    tenant_id=models.PositiveIntegerField(null=True)
     bill_no =  models.CharField(null=True,max_length=1024)
     inward_date_time =  models.DateTimeField(null=True)
     bill_date = models.DateField(null=True)
@@ -38,7 +38,7 @@ class raw_component_fin_bill_inward_details(models.Model):
         return str(self.bill_no) + '  -  ' + str(self.raw_component_company_details) + '  -  ' + str(self.inward_date_time)
 
 class receipt_no_generation(models.Model):
-    tenant_id=models.PositiveIntegerField()
+    tenant_id=models.PositiveIntegerField(null=True)
     receipt_no=models.IntegerField(null=True)
     financial_year = models.DateField(auto_now=True)
     worker_name=models.CharField(max_length=1024)
@@ -48,7 +48,7 @@ class receipt_no_generation(models.Model):
         return str(self.receipt_no) + '  -  ' + str(self.id)
 
 class raw_component_fin_material_bill_inward(models.Model):
-    tenant_id=models.PositiveIntegerField()
+    tenant_id=models.PositiveIntegerField(null=True)
     raw_component_fin_bill_inward_details=models.ForeignKey(raw_component_fin_bill_inward_details, null=True, blank=True, on_delete=models.CASCADE)
     raw_component_price = models.PositiveIntegerField()
     qty =  models.IntegerField(null=True)
@@ -71,7 +71,7 @@ class raw_component_fin_material_bill_inward(models.Model):
         return str(self.raw_component_price) + '  -  ' + str(self.qty) + '  -  ' + str(self.rate_match)
 
 class raw_component_fin_dc_inward_details(models.Model):
-    tenant_id=models.PositiveIntegerField()
+    tenant_id=models.PositiveIntegerField(null=True)
     dc_no =  models.CharField(null=True,max_length=1024)
     inward_date_time =  models.DateTimeField(null=True)
     dc_date = models.DateField(null=True)
@@ -90,7 +90,7 @@ class raw_component_fin_dc_inward_details(models.Model):
         return str(self.dc_no) + '  -  ' + str(self.raw_component_company_details) + '  -  ' + str(self.id)
 
 class raw_component_fin_material_dc_inward(models.Model):
-    tenant_id=models.PositiveIntegerField()
+    tenant_id=models.PositiveIntegerField(null=True)
     raw_component_fin_dc_inward_details=models.ForeignKey(raw_component_fin_dc_inward_details, null=True, blank=True, on_delete=models.CASCADE)
     raw_component_price =models.PositiveIntegerField()
     qty =  models.IntegerField(null=True)

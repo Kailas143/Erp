@@ -7,8 +7,8 @@ from django.db.models.fields.related import ForeignKey
 
 
 class AdminManager(models.Manager):
-    def get_queryset(self, username):
-        return super().get_queryset().filter(username=username, is_admin=True)
+    def get_queryset(self, username,tenant_id):
+        return super().get_queryset().filter(username=username,tenant_company=tenant_id,is_admin=True)
 
 
 class EmployeeManager(models.Manager):
